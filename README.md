@@ -206,7 +206,6 @@ O projeto inclui várias configurações prontas para uso em `configs/`:
 - **CONFIG_GUIDE.md**: Guia completo de configuração
 - **TRADING_GUIDE.md**: Explicação do sistema de trading
 - **QUICK_REFERENCE.md**: Referência rápida da API
-- **YAHOO_API_SUMMARY.md**: Resumo da integração com Yahoo Finance
 
 ## Dependências
 
