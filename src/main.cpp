@@ -3,6 +3,7 @@
 #include <memory>
 #include <csignal>
 #include "BinanceAPI.h"
+#include "YahooFinanceAPI.h"
 #include "SMAStrategy.h"
 #include "paperengine.h"
 #include "tradingbot.h"
@@ -10,27 +11,40 @@
 static volatile std::sig_atomic_t g_stop = 0;
 void sigint_handler(int) { g_stop = 1; }
 
-int main() {
+int main(int argc, char** argv) {
     std::signal(SIGINT, sigint_handler);
     std::cout << "Inicializando Simple Trading Bot (C++)\n";
 
-    // Cria componentes: API concreta (Binance), Strategy concreta (SMA) e PaperEngine
-    auto api = std::make_unique<BinanceAPI>();
+    // Choose data source with argument: --source=binance (default) or --source=yahoo
+    std::string source = "binance";
+    for (int i = 1; i < argc; ++i) {
+        std::string a = std::string(argv[i]);
+        if (a.rfind("--source=", 0) == 0) source = a.substr(9);
+        else if (a == "-s" && i+1 < argc) { source = std::string(argv[++i]); }
+    }
+
+    std::unique_ptr<ExchangeAPI> api;
+    if (source == "yahoo") {
+        api = std::make_unique<YahooFinanceAPI>();
+    } else {
+        api = std::make_unique<BinanceAPI>();
+    }
     auto strat = std::make_unique<SMAStrategy>(10, 30, 0.001);
     auto engine = std::make_unique<PaperEngine>(10000.0);
 
-    TradingBot bot(std::move(api), std::move(strat), std::move(engine), "BTCUSDT", "1m", 200);
+    std::string symbol = (source == "yahoo") ? "BTC-USD" : "BTCUSDT";
+    std::string interval = (source == "yahoo") ? "1d" : "1m";
+    TradingBot bot(std::move(api), std::move(strat), std::move(engine), symbol, interval, 200);
 
-    // Rodar em thread separada para possibilitar terminar com CTRL+C
+    // Run in a separate thread to allow termination with CTRL+C
     std::thread t([&bot](){
         bot.run(30);
     });
 
-    // aguardar CTRL+C
+    // Wait for CTRL+C
     while(!g_stop) std::this_thread::sleep_for(std::chrono::seconds(1));
-    std::cout << "SIGINT recebido - solicitando parada...\n";
-    // atualmente TradingBot não tem método stop - em melhoria poderíamos adicionar.
-    // Neste MVP vamos terminar o processo. Thread será terminada quando o processo sair.
+    std::cout << "SIGINT received - requesting stop...\n";
+    // Currently TradingBot does not have a stop method - this could be an improvement.
     std::exit(0);
     return 0;
 }

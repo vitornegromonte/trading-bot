@@ -39,3 +39,18 @@
 
 # debug information files
 *.dwo
+
+# Build directory
+build/
+
+# Jekyll
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+Gemfile.lock
+
+# Temporary files
+*.csv
+*.json.bak
+tmp_*
