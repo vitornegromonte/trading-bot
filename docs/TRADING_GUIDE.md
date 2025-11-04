@@ -1,185 +1,185 @@
-# Trading Bot - Complete Guide
+# Trading Bot - Guia Completo
 
-## Quick Start
+## Início Rápido
 
-### 1. Build Everything
+### 1. Compilar Tudo
 ```bash
 cd /home/vitor/development/trading-bot
 cmake -S . -B build
 cmake --build build
 ```
 
-### 2. Run Backtests (See Trading Results)
+### 2. Executar Backtests (Ver Resultados de Trading)
 
-#### Single Asset Detailed Backtest
+#### Backtest Detalhado de Ativo Único
 ```bash
 ./build/backtest_yahoo
 ```
 
-This shows:
-- ✅ Every trade signal (BUY/SELL)
-- ✅ Execution prices and quantities
-- ✅ Portfolio value after each trade
-- ✅ Final P&L and performance metrics
-- ✅ Comparison with buy & hold strategy
+Isso mostra:
+- ✅ Cada sinal de operação (COMPRA/VENDA)
+- ✅ Preços e quantidades de execução
+- ✅ Valor do portfólio após cada operação
+- ✅ Lucro/Prejuízo final e métricas de performance
+- ✅ Comparação com estratégia buy & hold
 
-**Example Output:**
+**Exemplo de Saída:**
 ```
-[Day 86] SIGNAL: BUY @ $516.57
-         FILLED: BUY 1.00 shares @ $516.57 (status: FILLED)
-         Portfolio: Cash=$9483.43 | Position=1.00 | NAV=$10000.00
+[Dia 86] SINAL: COMPRA @ $516.57
+         EXECUTADO: COMPRA 1.00 ações @ $516.57 (status: FILLED)
+         Portfólio: Dinheiro=$9483.43 | Posição=1.00 | NAV=$10000.00
 
-[Day 140] SIGNAL: SELL @ $541.23
-         FILLED: SELL 1.00 shares @ $541.23 (status: FILLED)
-         Portfolio: Cash=$10024.66 | Position=0.00 | NAV=$10024.66
+[Dia 140] SINAL: VENDA @ $541.23
+         EXECUTADO: VENDA 1.00 ações @ $541.23 (status: FILLED)
+         Portfólio: Dinheiro=$10024.66 | Posição=0.00 | NAV=$10024.66
 
-=== FINAL RESULTS ===
-Total Trades Executed: 7
-Final NAV: $10017.75
-Profit/Loss: $17.75 (+0.18%)
+=== RESULTADOS FINAIS ===
+Total de Operações Executadas: 7
+NAV Final: $10017.75
+Lucro/Prejuízo: $17.75 (+0.18%)
 ```
 
-#### Multi-Asset Backtest Suite
+#### Suite de Backtest Multi-Ativos
 ```bash
 ./build/multi_backtest
 ```
 
-Tests the strategy on:
-- SPY (S&P 500 ETF)
+Testa a estratégia em:
+- SPY (ETF do S&P 500)
 - QQQ (Nasdaq 100)
-- AAPL (Apple Stock)
-- TSLA (Tesla - high volatility)
+- AAPL (Ações da Apple)
+- TSLA (Tesla - alta volatilidade)
 - BTC-USD (Bitcoin)
 
-Shows comparative performance across different asset classes.
+Mostra performance comparativa entre diferentes classes de ativos.
 
-## What's Connected
+## O Que Está Conectado
 
-### ✅ Yahoo Finance API → Trading Bot
-The bot is **fully connected** to Yahoo Finance data. Here's what works:
+### ✅ API do Yahoo Finance → Trading Bot
+O bot está **totalmente conectado** aos dados do Yahoo Finance. Aqui está o que funciona:
 
-1. **Data Fetching** ✅
-   - Fetches daily OHLCV data for any symbol
-   - Supports stocks, ETFs, crypto, forex
-   - Handles date ranges properly
+1. **Busca de Dados** ✅
+   - Busca dados OHLCV diários para qualquer símbolo
+   - Suporta ações, ETFs, crypto, forex
+   - Lida com intervalos de datas adequadamente
 
-2. **Strategy Execution** ✅
-   - SMA(5, 20) crossover strategy
-   - Generates BUY/SELL signals based on moving average crosses
-   - Detects uptrend/downtrend reversals
+2. **Execução de Estratégia** ✅
+   - Estratégia de cruzamento SMA(5, 20)
+   - Gera sinais de COMPRA/VENDA baseados em cruzamentos de médias móveis
+   - Detecta reversões de tendência de alta/baixa
 
-3. **Trade Execution** ✅
-   - Paper trading engine simulates order fills
-   - Tracks cash and position inventory
-   - Calculates portfolio NAV
+3. **Execução de Operações** ✅
+   - Engine de paper trading simula preenchimento de ordens
+   - Rastreia dinheiro e inventário de posições
+   - Calcula NAV do portfólio
 
-4. **Performance Tracking** ✅
-   - Counts total trades
-   - Calculates profit/loss
-   - Compares with buy & hold benchmark
+4. **Rastreamento de Performance** ✅
+   - Conta total de operações
+   - Calcula lucro/prejuízo
+   - Compara com benchmark buy & hold
 
-## Why The Live Bot Shows "No Action"
+## Por Que o Bot ao Vivo Mostra "Sem Ação"
 
-When you run `./build/simple_trading_bot --source=yahoo`, you see:
+Quando você executa `./build/simple_trading_bot --source=yahoo`, você vê:
 ```
 [SINAL] sem ação no ciclo
 ```
 
-This is **expected behavior** because:
+Esse é um **comportamento esperado** porque:
 
-1. **Daily data doesn't change every 30 seconds** - The bot polls every 30 seconds, but Yahoo only has daily candles that update once per day
+1. **Dados diários não mudam a cada 30 segundos** - O bot consulta a cada 30 segundos, mas Yahoo só tem candles diários que atualizam uma vez por dia
 
-2. **Need historical window to generate signals** - The SMA strategy needs to see price changes over time to detect crossovers
+2. **Precisa de janela histórica para gerar sinais** - A estratégia SMA precisa ver mudanças de preço ao longo do tempo para detectar cruzamentos
 
-3. **Live mode vs Backtest mode**:
-   - **Live mode**: Waits for new data (slow with daily candles)
-   - **Backtest mode**: Replays historical data (fast, shows all trades)
+3. **Modo ao vivo vs Modo backtest**:
+   - **Modo ao vivo**: Espera por novos dados (lento com candles diários)
+   - **Modo backtest**: Reproduz dados históricos (rápido, mostra todas as operações)
 
-## How to See Trading Activity
+## Como Ver Atividade de Trading
 
-### Option 1: Run Backtest (Recommended)
+### Opção 1: Executar Backtest (Recomendado)
 ```bash
 ./build/backtest_yahoo
 ```
-This replays 2024 data day-by-day and shows all trades.
+Isso reproduz dados de 2024 dia a dia e mostra todas as operações.
 
-### Option 2: Run Multi-Asset Backtest
+### Opção 2: Executar Backtest Multi-Ativos
 ```bash
 ./build/multi_backtest
 ```
-This tests 5 different assets and shows which ones generated trades.
+Isso testa 5 ativos diferentes e mostra quais geraram operações.
 
-### Option 3: Live Mode (Slow)
-You would need to:
-- Run the bot continuously for days/weeks
-- Wait for actual crossover signals to occur
-- Use `--source=binance` for faster 1-minute updates
+### Opção 3: Modo ao Vivo (Lento)
+Você precisaria:
+- Executar o bot continuamente por dias/semanas
+- Esperar por sinais reais de cruzamento ocorrerem
+- Usar `--source=binance` para atualizações mais rápidas de 1 minuto
 
-## Understanding the Results
+## Entendendo os Resultados
 
-### What the Backtest Shows
+### O Que o Backtest Mostra
 
-**Example from SPY backtest:**
-- Started with: $10,000
-- Made 6 trades over 211 days
-- Ended with: $10,017.75
-- Profit: $17.75 (+0.18%)
-- Buy & Hold would have made: $1,776.01 (+17.76%)
+**Exemplo do backtest SPY:**
+- Começou com: $10.000
+- Fez 6 operações em 211 dias
+- Terminou com: $10.017,75
+- Lucro: $17,75 (+0,18%)
+- Buy & Hold teria feito: $1.776,01 (+17,76%)
 
-**Why strategy underperformed:**
-- Simple SMA crossover is **too slow** in trending markets
-- Works better in **sideways/choppy** markets
-- Many **whipsaw trades** (buy high, sell low during corrections)
+**Por que a estratégia teve desempenho inferior:**
+- Cruzamento SMA simples é **muito lento** em mercados em tendência
+- Funciona melhor em mercados **laterais/agitados**
+- Muitas **operações whipsaw** (comprar alto, vender baixo durante correções)
 
-### Most Active Trading
+### Trading Mais Ativo
 
-From the results, **TSLA** generated the most trades (17) due to high volatility:
+Dos resultados, **TSLA** gerou mais operações (17) devido à alta volatilidade:
 ```
-Trade #1: BUY @ $199.95
-Trade #2: SELL @ $176.54   <- Loss
-Trade #3: BUY @ $175.22
-Trade #4: SELL @ $171.11   <- Loss
+Operação #1: COMPRA @ $199.95
+Operação #2: VENDA @ $176.54   <- Prejuízo
+Operação #3: COMPRA @ $175.22
+Operação #4: VENDA @ $171.11   <- Prejuízo
 ...
-Trade #16: SELL @ $241.05  <- Profit
-Trade #17: BUY @ $262.51
+Operação #16: VENDA @ $241.05  <- Lucro
+Operação #17: COMPRA @ $262.51
 ```
 
-## Executables Summary
+## Resumo dos Executáveis
 
-| Executable | Purpose | What it shows |
-|------------|---------|---------------|
-| `simple_trading_bot` | Live trading mode | Waits for real-time signals (slow with daily data) |
-| `backtest_yahoo` | Single detailed backtest | Full trade log for SPY with SMA(5,20) |
-| `multi_backtest` | Multi-asset backtest | Quick results for 5 different assets |
-| `yahoo_demo` | API testing | Shows data fetching capabilities |
+| Executável | Propósito | O que mostra |
+|------------|-----------|--------------|
+| `simple_trading_bot` | Modo trading ao vivo | Espera por sinais em tempo real (lento com dados diários) |
+| `backtest_yahoo` | Backtest detalhado único | Log completo de operações para SPY com SMA(5,20) |
+| `multi_backtest` | Backtest multi-ativos | Resultados rápidos para 5 ativos diferentes |
+| `yahoo_demo` | Teste de API | Mostra capacidades de busca de dados |
 
-## Next Steps to Improve Trading
+## Próximos Passos para Melhorar Trading
 
-1. **Tune Strategy Parameters**
-   - Try different SMA periods (e.g., SMA(10, 50))
-   - Add momentum filters
-   - Use RSI or MACD instead
+1. **Ajustar Parâmetros de Estratégia**
+   - Tentar diferentes períodos de SMA (ex: SMA(10, 50))
+   - Adicionar filtros de momentum
+   - Usar RSI ou MACD em vez disso
 
-2. **Better Risk Management**
-   - Add stop-loss orders
-   - Position sizing based on volatility
-   - Don't trade during low-volume periods
+2. **Melhor Gerenciamento de Risco**
+   - Adicionar ordens stop-loss
+   - Dimensionamento de posição baseado em volatilidade
+   - Não operar durante períodos de baixo volume
 
-3. **Test Different Markets**
-   - Find assets with mean-reverting behavior
-   - Avoid strongly trending markets for SMA crossover
+3. **Testar Diferentes Mercados**
+   - Encontrar ativos com comportamento de reversão à média
+   - Evitar mercados fortemente em tendência para cruzamento SMA
 
-4. **Add More Strategies**
-   - Mean reversion
-   - Breakout strategies
+4. **Adicionar Mais Estratégias**
+   - Reversão à média
+   - Estratégias de breakout
    - Pair trading
 
-## Files Created for Trading
+## Arquivos Criados para Trading
 
-- `src/backtest_yahoo.cpp` - Detailed single-asset backtest
-- `src/multi_backtest.cpp` - Multi-asset comparison backtest
-- `src/YahooFinanceAPI.cpp` - Yahoo Finance data connector
-- `src/SMAStrategy.cpp` - Moving average crossover strategy
-- `src/paperengine.cpp` - Simulated trade execution
+- `src/backtest_yahoo.cpp` - Backtest detalhado de ativo único
+- `src/multi_backtest.cpp` - Backtest de comparação multi-ativos
+- `src/YahooFinanceAPI.cpp` - Conector de dados Yahoo Finance
+- `src/SMAStrategy.cpp` - Estratégia de cruzamento de média móvel
+- `src/paperengine.cpp` - Execução simulada de operações
 
-All components are **connected and working**. The backtests prove the entire pipeline works end-to-end! 🎉
+Todos os componentes estão **conectados e funcionando**. Os backtests provam que todo o pipeline funciona de ponta a ponta! 🎉

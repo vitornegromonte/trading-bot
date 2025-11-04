@@ -1,51 +1,51 @@
-# Trading Bot Configuration Guide
+# Guia de Configuração do Trading Bot
 
-## Overview
+## Visão Geral
 
-The trading bot now supports flexible configuration through JSON files and command-line arguments, making it easy to customize strategies, test different assets, and adjust parameters without recompiling.
+O trading bot agora suporta configuração flexível através de arquivos JSON e argumentos de linha de comando, facilitando a personalização de estratégias, teste de diferentes ativos e ajuste de parâmetros sem recompilar.
 
-## Quick Start
+## Início Rápido
 
-### Using Default Config
+### Usando Configuração Padrão
 
 ```bash
 ./build/configurable_backtest
 ```
 
-This uses `config.json` in the root directory.
+Isso usa o arquivo `config.json` no diretório raiz.
 
-### Using Command Line Arguments
+### Usando Argumentos de Linha de Comando
 
 ```bash
-# Test TSLA with different SMA periods
+# Testar TSLA com diferentes períodos de SMA
 ./build/configurable_backtest --symbol TSLA --sma-short 10 --sma-long 50
 
-# Test BTC-USD from 2023
+# Testar BTC-USD a partir de 2023
 ./build/configurable_backtest --symbol BTC-USD --start 2023-01-01
 
-# Use different capital and quantity
+# Usar capital e quantidade diferentes
 ./build/configurable_backtest --symbol AAPL --capital 50000 --qty 10
 ```
 
-### Using Preset Configs
+### Usando Configurações Pré-definidas
 
 ```bash
-# Aggressive Apple trading
+# Trading agressivo da Apple
 ./build/configurable_backtest --config configs/aggressive_aapl.json
 
-# Long-term crypto strategy
+# Estratégia de longo prazo para crypto
 ./build/configurable_backtest --config configs/crypto_longterm.json
 
-# Conservative weekly trading
+# Trading conservador semanal
 ./build/configurable_backtest --config configs/conservative_weekly.json
 
-# Volatile day-trader style
+# Estilo day-trader volátil
 ./build/configurable_backtest --config configs/volatile_daytrader.json
 ```
 
-## Configuration File Format
+## Formato do Arquivo de Configuração
 
-### config.json Structure
+### Estrutura do config.json
 
 ```json
 {
@@ -71,131 +71,119 @@ This uses `config.json` in the root directory.
 }
 ```
 
-### Field Descriptions
+### Descrição dos Campos
 
-| Field | Type | Description | Default | Options |
-|-------|------|-------------|---------|---------|
-| `data_source` | string | Data provider | `"yahoo"` | `"yahoo"`, `"binance"` |
-| `symbol` | string | Trading symbol | `"SPY"` | Any valid symbol for the data source |
-| `interval` | string | Candle interval | `"1d"` | `"1d"`, `"1wk"`, `"1mo"` (Yahoo) or `"1m"`, `"5m"`, `"1h"` (Binance) |
+| Campo | Tipo | Descrição | Padrão | Opções |
+|-------|------|-----------|--------|---------|
+| `data_source` | string | Provedor de dados | `"yahoo"` | `"yahoo"`, `"binance"` |
+| `symbol` | string | Símbolo de negociação | `"SPY"` | Qualquer símbolo válido |
+| `interval` | string | Intervalo de candles | `"1d"` | `"1d"`, `"1wk"`, `"1mo"` (Yahoo) |
 
-#### Backtest Settings
+#### Configurações de Backtest
 
-| Field | Type | Description | Default |
-|-------|------|-------------|---------|
-| `enabled` | boolean | Run backtest mode | `true` |
-| `start_date` | string | Start date (YYYY-MM-DD) | `"2024-01-01"` |
-| `end_date` | string | End date (YYYY-MM-DD) | `"2024-11-01"` |
-| `initial_capital` | number | Starting cash | `10000.0` |
+| Campo | Tipo | Descrição | Padrão |
+|-------|------|-----------|--------|
+| `enabled` | boolean | Executar modo backtest | `true` |
+| `start_date` | string | Data inicial (YYYY-MM-DD) | `"2024-01-01"` |
+| `end_date` | string | Data final (YYYY-MM-DD) | `"2024-11-01"` |
+| `initial_capital` | number | Capital inicial | `10000.0` |
 
-#### Strategy Settings
+#### Configurações de Estratégia
 
-| Field | Type | Description | Default |
-|-------|------|-------------|---------|
-| `type` | string | Strategy type | `"sma"` |
-| `short_period` | integer | Short SMA period | `5` |
-| `long_period` | integer | Long SMA period | `20` |
-| `trade_quantity` | number | Shares/units per trade | `1.0` |
+| Campo | Tipo | Descrição | Padrão |
+|-------|------|-----------|--------|
+| `type` | string | Tipo de estratégia | `"sma"` |
+| `short_period` | integer | Período da SMA curta | `5` |
+| `long_period` | integer | Período da SMA longa | `20` |
+| `trade_quantity` | number | Ações/unidades por operação | `1.0` |
 
-#### Live Trading Settings
+#### Configurações de Trading ao Vivo
 
-| Field | Type | Description | Default |
-|-------|------|-------------|---------|
-| `poll_interval_seconds` | integer | Seconds between polls | `60` |
-| `fetch_limit` | integer | Number of candles to fetch | `200` |
+| Campo | Tipo | Descrição | Padrão |
+|-------|------|-----------|--------|
+| `poll_interval_seconds` | integer | Segundos entre consultas | `60` |
+| `fetch_limit` | integer | Número de candles a buscar | `200` |
 
-## Command Line Options
+## Opções de Linha de Comando
 
-All config file settings can be overridden via command line:
+Todas as configurações podem ser sobrescritas via linha de comando:
 
 ```
---config FILE          Load configuration from FILE
---symbol SYMBOL        Override symbol (e.g., SPY, AAPL, BTC-USD)
---source SOURCE        Data source: yahoo or binance
---start DATE           Backtest start date YYYY-MM-DD
---end DATE             Backtest end date YYYY-MM-DD
---capital AMOUNT       Initial capital
---sma-short N          Short SMA period
---sma-long N           Long SMA period
---qty AMOUNT           Trade quantity
---interval INTERVAL    Data interval (1d, 1wk, 1mo)
---help                 Show help message
+--config ARQUIVO       Carregar configuração do ARQUIVO
+--symbol SÍMBOLO       Sobrescrever símbolo (ex: SPY, AAPL, BTC-USD)
+--source FONTE         Fonte de dados: yahoo ou binance
+--start DATA           Data inicial do backtest YYYY-MM-DD
+--end DATA             Data final do backtest YYYY-MM-DD
+--capital VALOR        Capital inicial
+--sma-short N          Período da SMA curta
+--sma-long N           Período da SMA longa
+--qty QUANTIDADE       Quantidade por operação
+--interval INTERVALO   Intervalo de dados (1d, 1wk, 1mo)
+--help                 Mostrar mensagem de ajuda
 ```
 
-## Preset Configurations
+## Configurações Pré-definidas
 
-### 1. Default (`config.json`)
-- **Symbol**: SPY (S&P 500)
-- **Period**: 2024 (10 months)
-- **Capital**: $10,000
-- **Strategy**: SMA(5, 20)
-- **Interval**: Daily
-- **Use case**: Conservative index fund trading
+### 1. Padrão (`config.json`)
+- **Símbolo**: SPY (S&P 500)
+- **Período**: 2024 (10 meses)
+- **Capital**: $10.000
+- **Estratégia**: SMA(5, 20)
+- **Intervalo**: Diário
 
-### 2. Aggressive AAPL (`configs/aggressive_aapl.json`)
-- **Symbol**: AAPL
-- **Period**: 2024 (10 months)
-- **Capital**: $50,000
-- **Strategy**: SMA(10, 50) with 10 shares per trade
-- **Interval**: Daily
-- **Use case**: Higher capital, larger positions on single stock
+### 2. AAPL Agressivo (`configs/aggressive_aapl.json`)
+- **Símbolo**: AAPL
+- **Capital**: $50.000
+- **Estratégia**: SMA(10, 50) com 10 ações por operação
 
-### 3. Crypto Long-term (`configs/crypto_longterm.json`)
-- **Symbol**: BTC-USD
-- **Period**: 2023-2024 (2 years)
-- **Capital**: $10,000
-- **Strategy**: SMA(7, 25) with 0.1 BTC per trade
-- **Interval**: Daily
-- **Use case**: Long-term cryptocurrency trend following
+### 3. Crypto Longo Prazo (`configs/crypto_longterm.json`)
+- **Símbolo**: BTC-USD
+- **Período**: 2023-2024 (2 anos)
+- **Estratégia**: SMA(7, 25) com 0.1 BTC por operação
 
-### 4. Conservative Weekly (`configs/conservative_weekly.json`)
-- **Symbol**: SPY
-- **Period**: 2020-2024 (5 years)
-- **Capital**: $100,000
-- **Strategy**: SMA(4, 13) with 10 shares per trade
-- **Interval**: Weekly
-- **Use case**: Long-term pension/retirement strategy
+### 4. Conservador Semanal (`configs/conservative_weekly.json`)
+- **Símbolo**: SPY
+- **Período**: 2020-2024 (5 anos)
+- **Capital**: $100.000
+- **Intervalo**: Semanal
 
-### 5. Volatile Day-trader (`configs/volatile_daytrader.json`)
-- **Symbol**: TSLA
-- **Period**: 2024 (10 months)
-- **Capital**: $25,000
-- **Strategy**: SMA(3, 15) with 5 shares per trade
-- **Interval**: Daily
-- **Use case**: Active trading on volatile stocks
+### 5. Day-trader Volátil (`configs/volatile_daytrader.json`)
+- **Símbolo**: TSLA
+- **Capital**: $25.000
+- **Estratégia**: SMA(3, 15) - trading ativo
 
-## Examples
+## Exemplos
 
-### Example 1: Quick Test Different Assets
+### Exemplo 1: Teste Rápido de Diferentes Ativos
 
 ```bash
-# Test multiple assets with same strategy
+# Testar múltiplos ativos com mesma estratégia
 for symbol in SPY QQQ AAPL TSLA; do
-  echo "Testing $symbol..."
+  echo "Testando $symbol..."
   ./build/configurable_backtest --symbol $symbol --sma-short 5 --sma-long 20
   echo ""
 done
 ```
 
-### Example 2: Parameter Sweep
+### Exemplo 2: Varredura de Parâmetros
 
 ```bash
-# Find optimal SMA periods for AAPL
+# Encontrar períodos ótimos de SMA para AAPL
 for short in 3 5 7 10; do
   for long in 15 20 30 50; do
     if [ $short -lt $long ]; then
-      echo "Testing SMA($short, $long)..."
+      echo "Testando SMA($short, $long)..."
       ./build/configurable_backtest --symbol AAPL \
         --sma-short $short --sma-long $long \
-        | grep "Profit/Loss:"
+        | grep "Lucro/Prejuízo:"
     fi
   done
 done
 ```
 
-### Example 3: Custom Config
+### Exemplo 3: Configuração Personalizada
 
-Create `my_strategy.json`:
+Crie `minha_estrategia.json`:
 ```json
 {
   "data_source": "yahoo",
@@ -214,91 +202,91 @@ Create `my_strategy.json`:
 }
 ```
 
-Then run:
+Execute:
 ```bash
-./build/configurable_backtest --config my_strategy.json
+./build/configurable_backtest --config minha_estrategia.json
 ```
 
-### Example 4: Override Config File
+### Exemplo 4: Sobrescrever Arquivo de Configuração
 
 ```bash
-# Use base config but test different symbol
+# Usar config base mas testar símbolo diferente
 ./build/configurable_backtest --config configs/aggressive_aapl.json --symbol MSFT
 
-# Use crypto config but different date range
+# Usar config crypto mas período diferente
 ./build/configurable_backtest --config configs/crypto_longterm.json \
   --start 2024-01-01 --end 2024-11-01
 ```
 
-## Tips for Configuration
+## Dicas para Configuração
 
-### Choosing SMA Periods
+### Escolhendo Períodos de SMA
 
-- **Fast Trading** (3-15): More trades, responsive to short-term moves
-- **Medium** (5-20): Balanced approach, filters some noise
-- **Slow Trading** (10-50): Fewer trades, follows major trends
+- **Trading Rápido** (3-15): Mais operações, responsivo a movimentos de curto prazo
+- **Médio** (5-20): Abordagem balanceada, filtra algum ruído
+- **Trading Lento** (10-50): Menos operações, segue tendências maiores
 
-### Capital Allocation
+### Alocação de Capital
 
-- **Conservative**: Risk 1-2% per trade
-- **Moderate**: Risk 3-5% per trade
-- **Aggressive**: Risk 5-10% per trade
+- **Conservador**: Arriscar 1-2% por operação
+- **Moderado**: Arriscar 3-5% por operação
+- **Agressivo**: Arriscar 5-10% por operação
 
-### Interval Selection
+### Seleção de Intervalo
 
-- **Daily**: Good for swing trading, 1-5 day holds
-- **Weekly**: Position trading, weeks to months
-- **Monthly**: Long-term investing, months to years
+- **Diário**: Bom para swing trading, manter 1-5 dias
+- **Semanal**: Position trading, semanas a meses
+- **Mensal**: Investimento de longo prazo, meses a anos
 
-### Symbol Selection
+### Seleção de Símbolo
 
-| Type | Low Volatility | Medium | High Volatility |
-|------|---------------|--------|-----------------|
+| Tipo | Baixa Volatilidade | Média | Alta Volatilidade |
+|------|-------------------|-------|-------------------|
 | **ETF** | SPY, IWM | QQQ | - |
-| **Stocks** | JNJ, PG | AAPL, MSFT | TSLA, NVDA |
+| **Ações** | JNJ, PG | AAPL, MSFT | TSLA, NVDA |
 | **Crypto** | - | ETH-USD | BTC-USD |
 
-## Troubleshooting
+## Solução de Problemas
 
-### No Trades Executed
+### Nenhuma Operação Executada
 
-**Possible causes:**
-1. SMA periods too close (e.g., 5 vs 6)
-2. Date range too short
-3. Strong trending market (no crossovers)
-4. Trade quantity too large for capital
+**Possíveis causas:**
+1. Períodos de SMA muito próximos (ex: 5 vs 6)
+2. Intervalo de datas muito curto
+3. Mercado em forte tendência (sem cruzamentos)
+4. Quantidade de operação muito grande para o capital
 
-**Solutions:**
-- Increase difference between periods (e.g., 5 vs 30)
-- Use longer date range (1+ years)
-- Try different symbols
-- Reduce trade quantity
+**Soluções:**
+- Aumentar diferença entre períodos (ex: 5 vs 30)
+- Usar intervalo de datas maior (1+ anos)
+- Testar símbolos diferentes
+- Reduzir quantidade de operação
 
-### All Trades Rejected
+### Todas as Operações Rejeitadas
 
-**Possible causes:**
-1. Insufficient capital for trade quantity
-2. Trying to sell without position
+**Possíveis causas:**
+1. Capital insuficiente para quantidade de operação
+2. Tentando vender sem posição
 
-**Solutions:**
-- Increase `initial_capital`
-- Decrease `trade_quantity`
-- Check first signal is BUY
+**Soluções:**
+- Aumentar `initial_capital`
+- Diminuir `trade_quantity`
+- Verificar se primeiro sinal é COMPRA
 
-## Building Your Own Config
+## Construindo Sua Própria Configuração
 
-1. **Start with a preset**: Copy a config that matches your style
-2. **Adjust symbol**: Pick an asset you understand
-3. **Set date range**: Test on historical data you're familiar with
-4. **Tune parameters**: Adjust SMA periods based on results
-5. **Scale capital**: Set realistic starting capital
-6. **Test**: Run backtest and analyze results
+1. **Comece com um preset**: Copie uma config que combine com seu estilo
+2. **Ajuste o símbolo**: Escolha um ativo que você entende
+3. **Defina intervalo de datas**: Teste em dados históricos familiares
+4. **Ajuste parâmetros**: Modifique períodos de SMA baseado nos resultados
+5. **Escale capital**: Defina capital inicial realista
+6. **Teste**: Execute backtest e analise resultados
 
-## Next Steps
+## Próximos Passos
 
-After finding a good configuration:
-1. Save it as a named preset
-2. Test on different time periods (walk-forward)
-3. Try on correlated symbols
-4. Add risk management rules
-5. Consider implementing in live mode (paper trading first!)
+Após encontrar uma boa configuração:
+1. Salve-a como um preset nomeado
+2. Teste em diferentes períodos de tempo
+3. Experimente em símbolos correlacionados
+4. Adicione regras de gerenciamento de risco
+5. Considere implementar em modo ao vivo (paper trading primeiro!)
