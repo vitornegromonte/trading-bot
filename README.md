@@ -1,6 +1,6 @@
 # Trading Bot
 
-[Documentação](https://vitornegromonte.github.io/trading-bot/docs/reference.html) | [Relatório]() | [Vídeo]()
+[Documentação](https://vitornegromonte.github.io/trading-bot/) | [Relatório]() | [Vídeo]()
 
 
 Projeto de um Trading Bot de ações e crypto utilizando APIs da Binance e da Yahoo Finance. Projeto para avaliação da disciplina CIN0135 - Estrutura de Dados Orientadas à Objetos.
