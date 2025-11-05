@@ -21,6 +21,18 @@ cmake -S . -B build
 cmake --build build
 ```
 
+### Executáveis Gerados
+
+Após a compilação, os seguintes executáveis estarão disponíveis em `build/`:
+
+| Executável | Descrição |
+|------------|-----------|
+| `CInTB` | Bot principal para trading ao vivo (Binance/Yahoo) |
+| `configurable_backtest` | Backtest com configuração flexível (recomendado) |
+| `backtest_yahoo` | Backtest detalhado de ativo único com log completo |
+| `multi_backtest` | Backtest comparativo em múltiplos ativos |
+| `yahoo_demo` | Demonstração das capacidades da API Yahoo Finance |
+
 ## Uso
 
 ### Backtest Configurável (Recomendado)
@@ -43,19 +55,19 @@ A maneira mais fácil de testar estratégias com parâmetros customizados:
 ./build/configurable_backtest --help
 ```
 
-**Veja [CONFIG_GUIDE.md](CONFIG_GUIDE.md) para documentação completa de configuração.**
+**Veja [CONFIG_GUIDE.md](docs/CONFIG_GUIDE.md) para documentação completa de configuração.**
 
-### Executar com Binance (padrão - candles de 1 minuto)
+### Executar Bot em Modo ao Vivo
 
 ```bash
+# Com Binance (candles de 1 minuto)
 ./build/CInTB
-```
 
-### Executar com Yahoo Finance (dados diários)
-
-```bash
+# Com Yahoo Finance (dados diários)
 ./build/CInTB --source=yahoo
 ```
+
+**Nota**: O modo ao vivo com dados diários mostrará "sem ação" frequentemente, pois os candles só atualizam uma vez por dia. Use os backtests para ver resultados de trading.
 
 ### Backtest de Estratégias de Trading
 
@@ -194,18 +206,18 @@ O projeto inclui várias configurações prontas para uso em `configs/`:
 # Usar preset de crypto
 ./build/configurable_backtest --config configs/crypto_longterm.json
 
-# Criar configuração personalizada
-./create_custom_config.sh
-
-# Testar todas as configurações pré-definidas
-./test_configs.sh
+# Testar múltiplos ativos
+for symbol in SPY QQQ AAPL TSLA; do
+  ./build/configurable_backtest --symbol $symbol
+done
 ```
 
 ## Documentação Adicional
 
-- **CONFIG_GUIDE.md**: Guia completo de configuração
-- **TRADING_GUIDE.md**: Explicação do sistema de trading
-- **QUICK_REFERENCE.md**: Referência rápida da API
+- **[CONFIG_GUIDE.md](docs/CONFIG_GUIDE.md)**: Guia completo de configuração
+- **[TRADING_GUIDE.md](docs/TRADING_GUIDE.md)**: Explicação do sistema de trading
+- **[QUICK_REFERENCE.md](docs/QUICK_REFERENCE.md)**: Referência rápida de comandos
+- **[Site de Documentação](https://vitornegromonte.github.io/trading-bot/)**: Documentação online completa
 
 ## Dependências
 
@@ -219,28 +231,45 @@ O projeto inclui várias configurações prontas para uso em `configs/`:
 ```
 trading-bot/
 ├── src/
-│   ├── main.cpp                     # Aplicação principal
+│   ├── main.cpp                     # Aplicação principal do bot
 │   ├── BinanceAPI.{h,cpp}           # Implementação da API Binance
 │   ├── YahooFinanceAPI.{h,cpp}      # Implementação da API Yahoo Finance
-│   ├── ExchangeAPI.h                # Interface abstrata
-│   ├── SMAStrategy.{h,cpp}          # Estratégia SMA
-│   ├── paperengine.{h,cpp}          # Motor de simulação
+│   ├── ExchangeAPI.h                # Interface abstrata para APIs
+│   ├── SMAStrategy.{h,cpp}          # Estratégia de cruzamento SMA
+│   ├── paperengine.{h,cpp}          # Motor de simulação de trades
 │   ├── tradingbot.{h,cpp}           # Orquestrador principal
-│   ├── config.h                     # Sistema de configuração
-│   ├── interval.h                   # Definição de intervalos
-│   ├── candle.h                     # Estrutura de dados de candle
-│   ├── order.h                      # Estrutura de ordem
-│   ├── strategy.h                   # Interface de estratégia
-│   ├── backtest_yahoo.cpp           # Backtest detalhado
-│   ├── multi_backtest.cpp           # Backtest multi-ativos
-│   ├── configurable_backtest.cpp    # Backtest configurável
-│   └── yahoo_demo.cpp               # Demo da API
-├── configs/                         # Configurações pré-definidas
-├── examples/                        # Exemplos de código
-├── CMakeLists.txt                   # Configuração de build
+│   ├── config.h                     # Sistema de configuração JSON
+│   ├── interval.h                   # Enums de intervalos (DAILY, WEEKLY, MONTHLY)
+│   ├── candle.h                     # Estrutura de dados OHLCV
+│   ├── order.h                      # Estrutura de ordem de trading
+│   ├── strategy.h                   # Interface abstrata de estratégia
+│   ├── backtest_yahoo.cpp           # Backtest detalhado de ativo único
+│   ├── multi_backtest.cpp           # Backtest comparativo multi-ativos
+│   ├── configurable_backtest.cpp    # Backtest com configuração flexível
+│   └── yahoo_demo.cpp               # Demonstração da API Yahoo Finance
+├── docs/
+│   ├── CONFIG_GUIDE.md              # Guia completo de configuração
+│   ├── TRADING_GUIDE.md             # Guia do sistema de trading
+│   ├── QUICK_REFERENCE.md           # Referência rápida de comandos
+│   ├── config.md                    # Página de configuração (Jekyll)
+│   ├── trading.md                   # Página de trading (Jekyll)
+│   └── reference.md                 # Página de referência (Jekyll)
+├── configs/                         # Configurações pré-definidas JSON
+│   ├── aggressive_aapl.json
+│   ├── crypto_longterm.json
+│   ├── conservative_weekly.json
+│   └── volatile_daytrader.json
+├── _layouts/
+│   └── default.html                 # Layout customizado Jekyll
+├── .vscode/
+│   └── settings.json                # Configurações do VS Code
+├── CMakeLists.txt                   # Configuração de build CMake
 ├── config.json                      # Configuração padrão
+├── _config.yml                      # Configuração Jekyll para GitHub Pages
+├── index.md                         # Página inicial do site
+├── CONFIG_GUIDE.md                  # Guia de configuração (raiz)
+├── TRADING_GUIDE.md                 # Guia de trading (raiz)
 └── README.md                        # Este arquivo
-
 ```
 
 ## Licença

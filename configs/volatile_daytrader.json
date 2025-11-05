@@ -1,0 +1,21 @@
+{
+  "data_source": "yahoo",
+  "symbol": "TSLA",
+  "interval": "1d",
+  "backtest": {
+    "enabled": true,
+    "start_date": "2024-01-01",
+    "end_date": "2024-11-01",
+    "initial_capital": 25000.0
+  },
+  "strategy": {
+    "type": "sma",
+    "short_period": 3,
+    "long_period": 15,
+    "trade_quantity": 5.0
+  },
+  "live_trading": {
+    "poll_interval_seconds": 60,
+    "fetch_limit": 200
+  }
+}
