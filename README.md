@@ -1,6 +1,6 @@
 # Trading Bot
 
-[Documentação](https://vitornegromonte.github.io/trading-bot/) | [Relatório](https://drive.google.com/drive/u/0/folders/1lzr5ZCgah6YWGleQ-RPpUFwRkLfqG9Jx) | [Vídeo](https://youtub.com/adaera)
+[Documentação](https://vitornegromonte.github.io/trading-bot/) | [Relatório](https://drive.google.com/file/d/1XMcX-OF92bBGKDgJER6ObfyNWIVhgkja/view?usp=sharing) | [Vídeo](https://drive.google.com/file/d/1377tETpGIa-5hm5qg1MwAON5xl-A6NMe/view?usp=sharing)
 
 
 Projeto de um Trading Bot de ações e crypto utilizando APIs da Binance e da Yahoo Finance. Projeto para avaliação da disciplina CIN0135 - Estrutura de Dados Orientadas à Objetos.
